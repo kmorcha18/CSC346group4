@@ -186,19 +186,28 @@ public class App {
                         case "twitter_url":
                             event = eventReader.nextEvent();
                             String twitter_url = event.asCharacters().getData();
+//                            System.out.println(twitter_url);
                             state.setTwitter_url(twitter_url);
                             break;
                         case "facebook_url":
                             event = eventReader.nextEvent();
+                            if(event.isEndElement()){
+                                String facebook_url = "N/A";
+                                state.setFacebook_url(facebook_url);
+                                break;
+                            }
                             String facebook_url = event.asCharacters().getData();
+//                            System.out.println(facebook_url);
                             state.setFacebook_url(facebook_url);
                             break;
                     }
                 }
                 if (event.isEndElement()) {
                     EndElement endElement = event.asEndElement();
+//                    event = eventReader.nextEvent();
                     if (endElement.getName().getLocalPart().equalsIgnoreCase("facebook_url")) {
                         states.add(state);
+//                        System.out.println(state);
                     }
                 }
             }
