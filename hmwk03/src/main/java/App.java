@@ -25,12 +25,11 @@ public class App {
         printStates(states);
 
 
-
         System.out.println("\nDone!");
     }
 
     private static void printStates(ArrayList<State> states) {
-        for(State state: states){
+        for (State state : states) {
             System.out.println(state);
         }
     }
@@ -85,7 +84,7 @@ public class App {
 
     private static ArrayList<State> readStates(String file) {
         State state = null;
-        ArrayList<State> states = new ArrayList<State>();
+        ArrayList<State> states = new ArrayList<>();
         try {
             XMLInputFactory factory = XMLInputFactory.newFactory();
             XMLEventReader eventReader = factory.createXMLEventReader(new FileReader(file));
@@ -190,6 +189,11 @@ public class App {
                             break;
                         case "facebook_url":
                             event = eventReader.nextEvent();
+                            if (event.isEndElement()) {
+                                String facebook_url = "N/A";
+                                state.setFacebook_url(facebook_url);
+                                break;
+                            }
                             String facebook_url = event.asCharacters().getData();
                             state.setFacebook_url(facebook_url);
                             break;
