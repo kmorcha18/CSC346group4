@@ -8,6 +8,7 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -20,12 +21,59 @@ import java.util.ArrayList;
 public class App {
     public static void main(String[] args) {
 
+        System.out.println("Reading the simple XML file...");
         readSimpleXML();
+        System.out.println();
+        System.out.println("Reading from weather website...");
+        String address = "https://w1.weather.gov/xml/current_obs/KSTJ.xml";
+        readWeatherURL(address);
+        System.out.println();
+        System.out.println("Reading the States XML file...");
         ArrayList<State> states = readStates("states.xml");
         printStates(states);
 
 
         System.out.println("\nDone!");
+    }
+
+    private static void readWeatherURL(String address) {
+        try {
+            URL url = new URL(address);
+            XMLInputFactory factory = XMLInputFactory.newFactory();
+            XMLEventReader eventReader = factory.createXMLEventReader(url.openStream());
+
+            while(eventReader.hasNext()){
+                XMLEvent event = (XMLEvent) eventReader.next();
+                if(event.isStartElement()){
+                    StartElement startElement = event.asStartElement();
+                    switch(startElement.getName().getLocalPart()){
+                        case "credit":
+                            event = (XMLEvent) eventReader.next();
+                            System.out.println(event.asCharacters().getData());
+                            break;
+                        case "observation_time_rfc822":
+                            event = (XMLEvent) eventReader.next();
+                            System.out.println("Observation Time: " + event.asCharacters().getData());
+                            break;
+                        case "temperature_string":
+                            event = (XMLEvent) eventReader.next();
+                            System.out.println("Temperature: " + event.asCharacters().getData());
+                            break;
+                        case "windchill_f":
+                            event = (XMLEvent) eventReader.next();
+                            System.out.println("Windchill in Fahrenheit: " + event.asCharacters().getData());
+                            break;
+                        case "relative_humidity":
+                            event = (XMLEvent) eventReader.next();
+                            System.out.println("Relative Humidity: " + event.asCharacters().getData());
+                    }
+                }
+            }
+            eventReader.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static void printStates(ArrayList<State> states) {
