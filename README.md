@@ -12,7 +12,7 @@
 </credentials>
 ```
 
-We want to pull all the data from this XML file including the attribute "xhint". The following line will allow us to read in streams of data `XMLInputFactory factory = XMLInputFactory.newFactory();`. Using the XMLInputFactory we just created, we will create an event reader so we know where to pull data from. `event.isStartElement()` is used to recognize each element. Using a switch statement we will be able to decided what we want to do with each element. We will need to use `event = eventReader.nextEvent();` to make sure the loop will run through again. Each variable we pull we will set using `event.asCharacters().getData();`. After this we can use a print statement to produce output.
+We want to pull all the data from this XML file including the attribute "xhint". The following line will allow us to read in streams of data `XMLInputFactory factory = XMLInputFactory.newFactory();`. Using the XMLInputFactory we just created, we will create an event reader so we know where to pull data from. `event.isStartElement()` is used to recognize each element. Using a switch statement we will be able to decided what we want to do with each element. We will need to use `event = eventReader.nextEvent();` to make sure the loop will run through again. Each variable we pull we will set using `event.asCharacters().getData();`. If we want to pull an attribute from an element, we can use the attribute class like so `Attribute xHint = startElement.getAttributeByName(new QName("xhint"));`. After this we can use a print statement to produce output.
 
 ``` java
 private static void readSimpleXML() {
